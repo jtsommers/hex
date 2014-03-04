@@ -1,18 +1,25 @@
-//
-//  main.cpp
-//  CMPS 109 Hex
-//
-//  Created by mrfb on 2/25/14.
-//  Copyright (c) 2014 CMPS109_W14. All rights reserved.
-//
+//	Matthew Balousek (mbalouse@ucsc.edu)
+//	Jordan Sommers (jtsommer@ucsc.edu)
+//	Prof. Pohl
+//	CMPS 109
+//	12 March 2014
+//	Assignment 6: Hex++ w/ GUI
+//	See README for comments.
 
-#include <iostream>
+#include <iostream>		// cout, cin
+#include <vector>		// vector
+#include "Graph.h"		// Graph
+#include "Hex.h"		// Hex
 
-int main(int argc, const char * argv[])
-{
+using namespace std;
 
-	// insert code here...
-	std::cout << "Hello, Hex!\n";
+int main(int argc, const char * argv[]){
+	Hex h(11);
+	h.playRandom();
+	cout << h << endl;
+	
+	cout << (h.pathExists(Black)?"Black (O, North/South)":"White (-, East/West)")
+		 << " wins!" << endl;
+	
     return 0;
 }
-
