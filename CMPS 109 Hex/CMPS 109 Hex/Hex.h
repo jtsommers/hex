@@ -21,8 +21,13 @@ public:
 	// Constructor: Builds board of a given size. Size should be odd.
 	Hex (int size);
 	
-	// playRandom: Fills board with random moves taken by alternating sides.
-	// NOTE: Move order currently isn't seeding.
+	// playerTurn: Gets input from player and processes their move as white.
+	void playerTurn();
+	
+	// computerTurn: AI determines optimal location for black player.
+	void computerTurn();
+	
+	// playRandom: Fills a game board with moves taken randomly.
 	void playRandom();
 	
 	// pathExists: checks if an uninterrupted path exists for the given color.

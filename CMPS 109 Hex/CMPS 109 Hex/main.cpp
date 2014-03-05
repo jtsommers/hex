@@ -13,10 +13,26 @@
 
 using namespace std;
 
+//debug mode. 0 = random play, 1 = player input
+const int MODE = 0;
+
 int main(int argc, const char * argv[]){
-	Hex h(11);
-	h.playRandom();
-	cout << h << endl;
+	int boardSize = 11;
+	Hex h(boardSize);
+	
+	if (MODE == 0) {
+		h.playRandom();
+		cout << h;
+	} else if(MODE == 1){
+		for (int i = 0; i < boardSize * boardSize; i++) {
+			if(i%2 == 0){
+				cout << h;
+				h.playerTurn();
+			} else {
+				h.computerTurn();
+			}
+		}
+	}
 	
 	cout << (h.pathExists(Black)?"Black (O, North/South)":"White (-, East/West)")
 		 << " wins!" << endl;

@@ -1,5 +1,6 @@
 #include "Hex.h"
 #include <algorithm>
+#include <string>
 
 // Constructor: Builds board of a given size. Size should be odd.
 Hex::Hex(int size) : board(size*size), dim(size){
@@ -10,10 +11,22 @@ Hex::Hex(int size) : board(size*size), dim(size){
 
 // Output operator overload.
 ostream& operator<< (ostream &out, Hex &h){
+	// Print column header.
+	out << "\n  ";
+	for (int col = 0; col < h.dim; col++) {
+		out << char('A' + col) << ' ';
+		
+	}
+	out << endl;
+	
 	for (int row = 0; row < h.dim; row++) {
-		for (int indent = 0; indent < row; indent++) {
+		for (int indent = 0; indent < row - 1; indent++) {
 			out << " ";
 		}
+		if (row < 9 && row > 0) {
+			out << ' ';
+		}
+		out << row + 1 << "\\ ";
 		
 		for (int col = 0; col < h.dim; col++) {
 			switch (h.tileOwner[row][col]) {
@@ -37,30 +50,31 @@ ostream& operator<< (ostream &out, Hex &h){
 // buildBoard: Builds adjacency for the game board.
 void Hex::buildBoard(){
 	for (int row = 0; row < dim; row++) {
-		for (int col = row; col < dim; col++) {
-			// Check left...
-			if (col - 1 >= 0) {
-				board.addAdj(node(row, col), node(row, col - 1), true);
-				// ...and bottom-left edges.
-				if (row + 1 < dim) {
-					board.addAdj(node(row, col), node(row + 1, col - 1), true);
+		for (int col = 0; col < dim; col++) {
+			int current = node(row, col);
+			// Everything except the first column has a left node.
+			if (col > 0) {
+				// Push horizontal left
+				board.addAdj(current, current - 1);
+				// Push off-axis left
+				if (row < dim - 1) {
+					board.addAdj(current, node(row + 1, col - 1));
 				}
 			}
-			// Check top-left edge.
-			if (row - 1 >= 0) {
-				board.addAdj(node(row, col), node(row - 1, col), true);
-			}
-			// Check bottom-right edge.
-			if (row + 1 < dim) {
-				board.addAdj(node(row, col), node(row + 1, col), true);
-			}
-			// Check right...
-			if (col + 1 < dim) {
-				board.addAdj(node(row, col), node(row, col + 1), true);
-				// ...and top-right edges.
-				if (row - 1 >= 0) {
-					board.addAdj(node(row, col), node(row - 1, col + 1), true);
+			// Everything except the last column has a right node.
+			if (col < dim - 1) {
+				// Push horizontal right
+				board.addAdj(current, current + 1);
+				if (row > 0) {
+					board.addAdj(current, node(row - 1, col + 1));
 				}
+			}
+			// Add column axis
+			if (row > 0) {
+				board.addAdj(current, current - dim);
+			}
+			if (row < dim - 1) {
+				board.addAdj(current, current + dim);
 			}
 		}
 	}
@@ -71,7 +85,63 @@ int Hex::node(int row, int col){
 	return row * dim + col;
 }
 
-// playRandom: Fills board with random moves taken by alternating sides.
+// playerTurn: Gets input from player and processes their move as white.
+void Hex::playerTurn(){
+	cout << "\nPlayer's turn. (-, East/West)" << endl;
+	string playerChoice;
+	bool inputIsBad;
+	int choiceCol, choiceRow;
+	
+	do {
+		cout << "Input a location: ";
+		playerChoice = "";
+		cin >> playerChoice;
+		
+		try {
+			choiceCol = int(playerChoice[0] - 'A');
+			choiceRow = stoi(playerChoice.substr(1)) - 1;
+			inputIsBad = choiceCol < 0
+						 || choiceCol >= dim
+						 || choiceRow < 0
+						 || choiceRow >= dim;
+		} catch (std::invalid_argument) {
+			inputIsBad = true;
+		}
+		
+		if (inputIsBad) {
+			cout << "Unable to parse that move. Use the format [Col][Row], e.g. \"A1\"." << endl;
+			continue;
+		}
+		
+		inputIsBad = tileOwner[choiceRow][choiceCol] != Unowned;
+		if(inputIsBad){
+			cout << "That space is occupied, try another." << endl;
+		}
+	} while (inputIsBad);
+	
+	tileOwner[choiceRow][choiceCol] = White;
+	
+	return;
+}
+
+// computerTurn: AI determines optimal location for black player.
+void Hex::computerTurn(){
+	cout << "\nComputer's turn. (O, North/South)\n";
+	// Dummy approach for testing. Picks first open free space.
+	for (int col = 0; col < dim; col++) {
+		for (int row = 0; row < dim; row++) {
+			if (tileOwner[col][row] == Unowned) {
+				tileOwner[col][row] = Black;
+				cout << "Black picks: " << char(col + 'A') << row + 1 << ".\n";
+				return;
+			}
+		}
+	}
+	
+	return;
+}
+
+// playRandom: Fills a game board with moves taken randomly.
 void Hex::playRandom(){
 	// Create a vector of ints with the values 0, 1, ..., (numNodes - 1).
 	vector<int> moveOrder;
