@@ -5,4 +5,8 @@ CMPS 109
 12 March 2014
 Assignment 6: Hex++ w/ GUI
 
-LOREM IPSUM SOLOR ISMET.
+This program implements a Monte Carlo AI player for the Hex game.
+
+By running a large number of randomized game simulations before each possible
+move, the program is able to determine which move it needs to take to get the 
+highest probability of winning.
