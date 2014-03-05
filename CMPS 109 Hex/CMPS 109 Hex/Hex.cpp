@@ -161,19 +161,23 @@ void Hex::playRandom(){
 		whiteToMove = !whiteToMove;
 	}
 }
+
+bool Hex::pathExists(Allegiance color) {
+    return this->pathExists(color, tileOwner);
+}
 				
 // pathExists: checks if an uninterrupted path exists for the given color.
-bool Hex::pathExists(Allegiance color){
+bool Hex::pathExists(Allegiance color, const vector< vector<Allegiance> > & owners){
 	vector<searchStatus> foo(dim, white);
 	vector< vector<searchStatus> > nodeState(dim, foo);
 	list<int> queue;
 	
 	// Enqueue possible root nodes into the queue.
 	for (int i = 0; i < dim; i++) {
-		if (color == White && tileOwner[i][0] == White) {
+		if (color == White && owners[i][0] == White) {
 			queue.push_back(i * dim);
 			nodeState[i][0] = grey;
-		} else if (color == Black && tileOwner[0][i] == Black){
+		} else if (color == Black && owners[0][i] == Black){
 			queue.push_back(i);
 			nodeState[0][i] = grey;
 		}
@@ -195,7 +199,7 @@ bool Hex::pathExists(Allegiance color){
 		vector<int> qChildren = board.getAdj(node(qRow, qCol));
 		for (int i = 0; i < qChildren.size(); i++) {
 			if (nodeState[qChildren[i] / dim][qChildren[i] % dim] == white
-				&& tileOwner[qChildren[i] / dim][qChildren[i] % dim] == color) {
+				&& owners[qChildren[i] / dim][qChildren[i] % dim] == color) {
 				queue.push_back(qChildren[i]);
 				nodeState[qChildren[i] / dim][qChildren[i] % dim] = grey;
 			}

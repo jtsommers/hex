@@ -32,6 +32,7 @@ public:
 	
 	// pathExists: checks if an uninterrupted path exists for the given color.
 	bool pathExists(Allegiance color);
+    bool pathExists(Allegiance color, const vector< vector<Allegiance> > & owners);
 	
 	// Output operator overload.
 	friend ostream& operator<< (ostream &out, Hex &h);
