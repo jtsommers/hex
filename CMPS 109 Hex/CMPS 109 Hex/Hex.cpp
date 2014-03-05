@@ -162,7 +162,8 @@ void Hex::computerTurn(int numSimulations){
 	time = clock() - time;
 	
 	tileOwner[bestNode / dim][bestNode % dim] = Black;
-	cout << "Computer chooses " << char('A' + (bestNode / dim)) << bestNode % dim << ".\n";
+	cout << "Computer chooses " << char('A' + (bestNode % dim)) << bestNode / dim + 1 << "."
+		 << " (" << bestScore << '/' << numSimulations << ")\n";
 	cout << "Turn elapsed in a mere " << time << " clicks.\n";
 	
 	return;
