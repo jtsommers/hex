@@ -87,7 +87,7 @@ int Hex::node(int row, int col){
 }
 
 // playerTurn: Gets input from player and processes their move as white.
-void Hex::playerTurn(){
+bool Hex::playerTurn(){
 	cout << "\nPlayer's turn. (-, East/West)" << endl;
 	string playerChoice;
 	bool inputIsBad;
@@ -98,6 +98,10 @@ void Hex::playerTurn(){
 		playerChoice = "";
 		cin >> playerChoice;
 		
+        if (playerChoice.compare("random") == 0) {
+            return false;
+        }
+        
 		try {
 			choiceCol = int(playerChoice[0] - 'A');
 			choiceRow = stoi(playerChoice.substr(1)) - 1;
@@ -122,7 +126,7 @@ void Hex::playerTurn(){
 	
 	tileOwner[choiceRow][choiceCol] = White;
 	
-	return;
+	return true;
 }
 
 // computerTurn: AI determines optimal location for black player.

@@ -20,7 +20,9 @@ int main(int argc, const char * argv[]){
 	for (int i = 0; i < boardSize * boardSize; i++) {
 		if(i%2 == 0){
 			cout << h;
-			h.playerTurn();
+			if (!h.playerTurn()) {
+                h.playRandom();
+            }
 		} else {
 			h.computerTurn();
 		}

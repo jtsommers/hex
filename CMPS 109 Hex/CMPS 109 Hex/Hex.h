@@ -22,7 +22,7 @@ public:
 	Hex (int size);
 	
 	// playerTurn: Gets input from player and processes their move as white.
-	void playerTurn();
+	bool playerTurn();
 	
 	// computerTurn: AI determines optimal location for black player.
 	void computerTurn(int numSimulations = 256);
