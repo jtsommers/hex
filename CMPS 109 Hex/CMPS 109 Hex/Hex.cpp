@@ -126,23 +126,6 @@ void Hex::playerTurn(){
 }
 
 // computerTurn: AI determines optimal location for black player.
-void Hex::computerTurn(){
-	cout << "\nComputer's turn. (O, North/South)\n";
-	// Dummy approach for testing. Picks first open free space.
-	for (int col = 0; col < dim; col++) {
-		for (int row = 0; row < dim; row++) {
-			if (tileOwner[col][row] == Unowned) {
-				tileOwner[col][row] = Black;
-				cout << "Black picks: " << char(col + 'A') << row + 1 << ".\n";
-				return;
-			}
-		}
-	}
-	
-	return;
-}
-
-// computerTurn: AI determines optimal location for black player.
 void Hex::computerTurn(int numSimulations){
 	cout << "\nComputer's turn. (O, North/South)\n";
 	clock_t time = clock();
