@@ -14,7 +14,7 @@
 using namespace std;
 
 //debug mode. 0 = random play, 1 = player input
-const int MODE = 0;
+const int MODE = 1;
 
 int main(int argc, const char * argv[]){
 	int boardSize = 11;
@@ -29,13 +29,15 @@ int main(int argc, const char * argv[]){
 				cout << h;
 				h.playerTurn();
 			} else {
+				//begin timing
 				h.computerTurn();
+				//end and print timing
 			}
 		}
 	}
 	
 	cout << (h.pathExists(Black)?"Black (O, North/South)":"White (-, East/West)")
-		 << " wins!" << endl;
+	<< " wins!" << endl;
 	
     return 0;
 }
