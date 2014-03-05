@@ -128,7 +128,7 @@ void Hex::playerTurn(){
 // computerTurn: AI determines optimal location for black player.
 void Hex::computerTurn(int numSimulations){
 	cout << "\nComputer's turn. (O, North/South)\n";
-	clock_t time = clock();
+	auto timeBegin = chrono::high_resolution_clock::now();
 	
 	vector<vector<Allegiance>> simState = tileOwner;
 	list<int> unownedNodes;
@@ -159,12 +159,13 @@ void Hex::computerTurn(int numSimulations){
 		unownedNodes.pop_front();
 	}
 	
-	time = clock() - time;
+	auto timeEnd = chrono::high_resolution_clock::now();
+	auto deltaTime = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeBegin).count();
 	
 	tileOwner[bestNode / dim][bestNode % dim] = Black;
 	cout << "Computer chooses " << char('A' + (bestNode % dim)) << bestNode / dim + 1 << "."
 		 << " (" << bestScore << '/' << numSimulations << ")\n";
-	cout << "Turn elapsed in a mere " << time << " clicks.\n";
+	cout << "Turn elapsed in a mere " << deltaTime * 1.0 / 1000 << " seconds.\n";
 	
 	return;
 }
@@ -223,17 +224,18 @@ bool Hex::pathExists(Allegiance color, const vector< vector<Allegiance> > & owne
 		int qRow = (*queue.begin()) / dim,
 			qCol = (*queue.begin()) % dim;
 		
-		// If a node on the opposite side exists in the queue, a path exists.
-		if ((color == White && qCol == dim - 1)
-			|| (color == Black && qRow == dim - 1)){
-			return true;
-		}
-		
 		// Enqueue any undiscovered children nodes.
 		vector<int> qChildren = board.getAdj(node(qRow, qCol));
 		for (int i = 0; i < qChildren.size(); i++) {
 			if (nodeState[qChildren[i] / dim][qChildren[i] % dim] == white
 				&& owners[qChildren[i] / dim][qChildren[i] % dim] == color) {
+				// If a node on the opposite side exists in the queue, a path exists.
+				int qcCol = qChildren[i] % dim,
+					qcRow = qChildren[i] / dim;
+				if ((color == White && qcCol == dim - 1)
+					|| (color == Black && qcRow == dim - 1)){
+					return true;
+				}
 				queue.push_back(qChildren[i]);
 				nodeState[qChildren[i] / dim][qChildren[i] % dim] = grey;
 			}
