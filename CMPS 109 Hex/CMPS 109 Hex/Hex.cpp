@@ -1,6 +1,7 @@
 #include "Hex.h"
 #include <algorithm>
 #include <string>
+#include <time.h>		// clock_t, clock, CLOCKS_PER_SEC
 
 // Constructor: Builds board of a given size. Size should be odd.
 Hex::Hex(int size) : board(size*size), dim(size){
@@ -144,7 +145,7 @@ void Hex::computerTurn(){
 // computerTurn: AI determines optimal location for black player.
 void Hex::computerTurn(int numSimulations){
 	cout << "\nComputer's turn. (O, North/South)\n";
-	//begin timing
+	clock_t time = clock();
 	
 	vector<vector<Allegiance>> simState = tileOwner;
 	list<int> unownedNodes;
@@ -175,8 +176,11 @@ void Hex::computerTurn(int numSimulations){
 		unownedNodes.pop_front();
 	}
 	
-	// end timer and print
-	// set choice to owned by black and print
+	time = clock() - time;
+	
+	tileOwner[bestNode / dim][bestNode % dim] = Black;
+	cout << "Computer chooses " << char('A' + (bestNode / dim)) << bestNode % dim << ".\n";
+	cout << "Turn elapsed in a mere " << time << " clicks.\n";
 	
 	return;
 }
