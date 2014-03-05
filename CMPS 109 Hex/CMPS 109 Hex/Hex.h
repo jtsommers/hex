@@ -29,6 +29,7 @@ public:
 	
 	// playRandom: Fills a game board with moves taken randomly.
 	void playRandom();
+    void playRandom(vector< vector<Allegiance> > & owners);
 	
 	// pathExists: checks if an uninterrupted path exists for the given color.
 	bool pathExists(Allegiance color);

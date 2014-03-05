@@ -185,12 +185,16 @@ void Hex::computerTurn(int numSimulations){
 	return;
 }
 
+void Hex::playRandom() {
+    this->playRandom(tileOwner);
+}
+
 // playRandom: Fills a game board with moves taken randomly.
-void Hex::playRandom(){
+void Hex::playRandom(vector< vector<Allegiance> > & owners){
 	vector<int> moveOrder;
 	// Populate moveOrder with the addresses of unowned nodes.
 	for (int i = 0; i < dim*dim; i++){
-		if (tileOwner[i / dim][i % dim] == Unowned) {
+		if (owners[i / dim][i % dim] == Unowned) {
 			moveOrder.push_back(i);
 		}
 	}
@@ -203,7 +207,7 @@ void Hex::playRandom(){
 	// Alternate between who gets to take a move. White goes first.
 	bool whiteToMove = true;
 	for (int i = 0; i < moveOrder.size(); i++) {
-		tileOwner[moveOrder[i] / dim][moveOrder[i] % dim] = whiteToMove?White:Black;
+		owners[moveOrder[i] / dim][moveOrder[i] % dim] = whiteToMove?White:Black;
 		whiteToMove = !whiteToMove;
 	}
 }
