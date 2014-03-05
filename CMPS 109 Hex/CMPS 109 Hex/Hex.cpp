@@ -141,12 +141,54 @@ void Hex::computerTurn(){
 	return;
 }
 
+// computerTurn: AI determines optimal location for black player.
+void Hex::computerTurn(int numSimulations){
+	cout << "\nComputer's turn. (O, North/South)\n";
+	//begin timing
+	
+	vector<vector<Allegiance>> simState = tileOwner;
+	list<int> unownedNodes;
+	for (int i = 0; i < dim*dim; i++){
+		if (simState[i / dim][i % dim] == Unowned) {
+			unownedNodes.push_back(i);
+		}
+	}
+	
+	int bestNode = -1,
+	bestScore = -1;
+	while (!unownedNodes.empty()) {
+		// For each possible move, evaluate its fitness as a potential move.
+		int score = 0;
+		for (int i = 0; i < numSimulations; i++) {
+			simState = tileOwner;
+			simState[unownedNodes.front() / dim][unownedNodes.front() % dim] = Black;
+			playRandom(simState);
+			if (pathExists(Black, simState)) {
+				score++;
+			}
+		}
+		
+		if (score > bestScore) {
+			bestScore = score;
+			bestNode = unownedNodes.front();
+		}
+		unownedNodes.pop_front();
+	}
+	
+	// end timer and print
+	// set choice to owned by black and print
+	
+	return;
+}
+
 // playRandom: Fills a game board with moves taken randomly.
 void Hex::playRandom(){
-	// Create a vector of ints with the values 0, 1, ..., (numNodes - 1).
 	vector<int> moveOrder;
+	// Populate moveOrder with the addresses of unowned nodes.
 	for (int i = 0; i < dim*dim; i++){
-		moveOrder.push_back(i);
+		if (tileOwner[i / dim][i % dim] == Unowned) {
+			moveOrder.push_back(i);
+		}
 	}
 	
 	// Mix up the vector. This serves as the move order.
