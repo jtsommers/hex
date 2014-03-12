@@ -9,4 +9,21 @@ This program implements a Monte Carlo AI player for the Hex game.
 
 By running a large number of randomized game simulations before each possible
 move, the program is able to determine which move it needs to take to get the 
-highest probability of winning.
+highest probability of winning. The computer takes about 5-7 seconds to decide
+on which move to make on our machines, but your mileage may vary.
+
+We developed and tested on OSX, but the program is also confirmed to work on 
+Unix with SSH. The user should interact with the program from the command line, 
+and the GUI window will update accordingly after each move has been made.
+
+(A note: on Unix the display window won't display until after the first move has
+been made.)
+
+(Another note: ssh -Y was required in our use case, rather than the suggested 
+ssh -X command from Piazza)
+
+Through completing this program, we learned the true value of friendship, and
+the secret meaning of Christmas. Also, we learned that GUI programming is sort
+of weird. We forked our GUI portion of the program from some of the example code
+that was given out, and it had defined the locations of the screen via glOrtho
+in a way that confused us for a while until we finally figured it out.
