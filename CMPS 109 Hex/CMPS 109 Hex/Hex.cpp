@@ -201,6 +201,14 @@ void Hex::playRandom(vector< vector<Allegiance> > & owners){
 	}
 }
 
+vector<vector<Allegiance>> Hex::getOwners(){
+	return tileOwner;
+}
+
+void Hex::getOwners(vector<vector<Allegiance>> & f){
+	f = tileOwner;
+}
+
 bool Hex::pathExists(Allegiance color) {
     return this->pathExists(color, tileOwner);
 }

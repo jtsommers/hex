@@ -36,6 +36,10 @@ public:
 	bool pathExists(Allegiance color);
     bool pathExists(Allegiance color, const vector< vector<Allegiance> > & owners);
 	
+	// getOwners: Either returns the ownership array or copies it to the reference.
+	vector<vector<Allegiance>> getOwners();
+	void getOwners(vector<vector<Allegiance>> & f);
+	
 	// Output operator overload.
 	friend ostream& operator<< (ostream &out, Hex &h);
 	
