@@ -20,6 +20,7 @@ class Hex{
 public:
 	// Constructor: Builds board of a given size. Size should be odd.
 	Hex (int size);
+    Hex () : Hex(0) {};
 	
 	// playerTurn: Gets input from player and processes their move as white.
 	bool playerTurn();
