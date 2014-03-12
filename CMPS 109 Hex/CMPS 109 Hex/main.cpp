@@ -25,37 +25,7 @@
 
 using namespace std;
 
-Hex h;
-int turnCounter = 0;
-bool win = false;
-
-void takeTurn(Hex& board, int turnMarker) {
-    if (turnMarker % 2 == 0) {
-        cout << board;
-        // Plays out the rest of the board randomly if human enters "random"
-        if (!board.playerTurn()) {
-            board.playRandom();
-        }
-    } else {
-        // Take AI turn
-        board.computerTurn();
-    }
-}
-
-bool checkPath(Hex& board) {
-    if (board.pathExists(White)) {
-        cout << board;
-        cout << "\nWhite (-, East/West) wins! Hooray for humans!\n";
-        return true;
-    } else if (board.pathExists(Black)) {
-        cout << board;
-        cout << "\nBlack (O, North/South) wins! Hooray for computers!\n";
-        return true;
-    }
-    return false;
-}
-
-#pragma mark GLUT stuff
+#pragma mark shapes
 
 const int RESOLUTIONX = 800;
 const int RESOLUTIONY = 600;
@@ -72,6 +42,8 @@ struct color {
 	}
 };
 
+const color playerBorder(0.6, 0.0, 0.0);
+const color enemyBorder(0.0, 0.0, 0.6);
 const color player(1.0, 0.0, 0.0);
 const color enemy(0.0, 0.0, 1.0);
 const color neutral(0.7, 0.7, 0.7);
@@ -122,6 +94,7 @@ class Hexagon : public Shape {
 public:
 	Hexagon(float x, float y, float s, float r, float g, float b);
 	void changeColor(float r, float g, float b);
+    void updateColor(Allegiance owner);
 protected:
 	float r;
 	float g;
@@ -141,6 +114,17 @@ void Hexagon::changeColor(float r, float g, float b){
 	this->b = b;
 }
 
+void Hexagon::updateColor(Allegiance owner){
+    if (owner == Unowned) {
+        return;
+    }
+    if (owner == White) {
+        this->changeColor(player.r, player.g, player.b);
+    } else if(owner == Black) {
+        this->changeColor(enemy.r, enemy.g, enemy.b);
+    }
+}
+
 void Hexagon::specificDraw() const {
 	glColor3f(r, g, b);
 	glBegin(GL_POLYGON);
@@ -152,6 +136,42 @@ void Hexagon::specificDraw() const {
 	glVertex2f(0, 0.25);
 	glEnd();
 }
+
+#pragma mark Hex
+
+Hex h;
+int turnCounter = 0;
+bool win = false;
+
+void takeTurn(Hex& board, int turnMarker) {
+    if (turnMarker % 2 == 0) {
+        cout << board;
+        // Plays out the rest of the board randomly if human enters "random"
+        if (!board.playerTurn()) {
+            board.playRandom();
+        }
+    } else {
+        // Take AI turn
+        board.computerTurn();
+    }
+}
+
+bool checkPath(Hex& board) {
+    if (board.pathExists(White)) {
+        cout << board;
+        cout << "\nWhite (-, East/West) wins! Hooray for humans!\n";
+        return true;
+    } else if (board.pathExists(Black)) {
+        cout << board;
+        cout << "\nBlack (O, North/South) wins! Hooray for computers!\n";
+        return true;
+    }
+    return false;
+}
+
+#pragma mark GLUT stuff
+
+std::vector<vector <Hexagon*> > guiBoard;
 
 
 //Main draw callback:
@@ -177,13 +197,18 @@ void drawStuff(){
 	glPushMatrix();
 	glTranslatef(0,0,1);
 	glPopMatrix();
-	// glScalef(0.5,0.5,0.5);
-	// glutSolidTeapot(15);
     
 	glutSwapBuffers();
 }
 
-
+void updateGuiColors() {
+    vector< vector<Allegiance> > owners = h.getOwners();
+    for (int i = 0; i < 11; i++) {
+        for (int j = 0; j < 11; j++) {
+            guiBoard.at(i).at(j)->updateColor(owners.at(i).at(j));
+        }
+    }
+}
 
 static void idle(){
     if (!win) {
@@ -193,19 +218,22 @@ static void idle(){
             win = true;
         }
     }
+    updateGuiColors();
 	glutPostRedisplay();
-	// glFlush();
 }
 
 
 void setupDrawList(){
-    
+    std::vector<Hexagon*> row;
 	
+    // Magic numbers
 	float scale = 40;
 	float xOffset = 0.0;
 	float xPadding = 1;
 	float yPadding = -9;
 	float yBase = RESOLUTIONY/2 - (30*13 + 10)/2;
+
+	Hexagon * temp;
     
 	for(int j = 0; j < 13; j++){
 		for(int i = 0; i < 13; i++){
@@ -216,21 +244,27 @@ void setupDrawList(){
 				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + i * xPadding,
 													  yBase + j * scale + j * yPadding,
 													  scale,
-													  player.r, player.g, player.b));
+													  playerBorder.r, playerBorder.g, playerBorder.b));
 			} else if (j == 0 || j == 12){
 				//draw row of blue for AI
 				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + i * xPadding,
 													  yBase + j * scale + j * yPadding,
 													  scale,
-													  enemy.r, enemy.g, enemy.b));
+													  enemyBorder.r, enemyBorder.g, enemyBorder.b));
 			} else {
 				// draw our vanilla shapes
-				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + i * xPadding,
-													  yBase + j * scale + j * yPadding,
-													  scale,
-													  neutral.r, neutral.g, neutral.b));
+				temp = new Hexagon(i * scale + xOffset + i * xPadding,
+									yBase + j * scale + j * yPadding,
+									scale,
+									neutral.r, neutral.g, neutral.b);
+				Shape::drawList.push_back(temp);
+				row.push_back(temp);
 			}
 		}
+        if (j > 0 && j < 12) {
+            guiBoard.push_back(row);
+            row = std::vector<Hexagon *>();
+        }
 		xOffset += (scale / 2);
 	}
     
@@ -240,7 +274,7 @@ void initializeGLUT(int argc, char **argv) {
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(RESOLUTIONX, RESOLUTIONY); //Set the size you want
-	glutCreateWindow("GL Primer"); //Window name
+	glutCreateWindow("Hex"); //Window name
     
 	// glutKeyboardFunc(key);
 	glutDisplayFunc(drawStuff); //Callback for the current window
@@ -268,13 +302,5 @@ int main(int argc, char **argv){
 			initializeGLUT(argc, argv);
 		}
 	}
-	
-//	for (int i = 0; i < boardSize * boardSize; i++) {
-//		takeTurn(h, i);
-//		if (checkPath(h)) {
-//            break;
-//        }
-//	}
-//		
     return 0;
 }

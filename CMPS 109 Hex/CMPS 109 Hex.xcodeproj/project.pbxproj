@@ -11,6 +11,8 @@
 		BA1C9DDC18C69D85003CDC26 /* Hex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA1C9DD618C69D85003CDC26 /* Hex.cpp */; };
 		BA1C9DDD18C69D85003CDC26 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA1C9DD818C69D85003CDC26 /* main.cpp */; };
 		BA1C9DDE18C69D85003CDC26 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = BA1C9DD918C69D85003CDC26 /* Makefile */; };
+		C8F7730618CFFFB6002A5DC6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8F7730518CFFFB6002A5DC6 /* OpenGL.framework */; };
+		C8F7730818CFFFBB002A5DC6 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8F7730718CFFFBB002A5DC6 /* GLUT.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +36,8 @@
 		BA1C9DD918C69D85003CDC26 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		BA1C9DDA18C69D85003CDC26 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		BA36554B18BD414E002698E8 /* CMPS 109 Hex */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "CMPS 109 Hex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8F7730518CFFFB6002A5DC6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		C8F7730718CFFFBB002A5DC6 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +45,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8F7730818CFFFBB002A5DC6 /* GLUT.framework in Frameworks */,
+				C8F7730618CFFFB6002A5DC6 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +56,8 @@
 		BA36554218BD414E002698E8 = {
 			isa = PBXGroup;
 			children = (
+				C8F7730718CFFFBB002A5DC6 /* GLUT.framework */,
+				C8F7730518CFFFB6002A5DC6 /* OpenGL.framework */,
 				BA36554D18BD414E002698E8 /* CMPS 109 Hex */,
 				BA36554C18BD414E002698E8 /* Products */,
 			);

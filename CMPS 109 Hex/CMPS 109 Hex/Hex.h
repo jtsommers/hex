@@ -26,7 +26,7 @@ public:
 	bool playerTurn();
 	
 	// computerTurn: AI determines optimal location for black player.
-	void computerTurn(int numSimulations = 256);
+	void computerTurn(int numSimulations = 1000);
 	
 	// playRandom: Fills a game board with moves taken randomly.
 	void playRandom();
