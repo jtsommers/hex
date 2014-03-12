@@ -16,6 +16,24 @@
 
 using namespace std;
 
+const int RESOLUTIONX = 800;
+const int RESOLUTIONY = 600;
+
+struct color {
+	float r;
+	float g;
+	float b;
+	
+	color(float x, float y, float z){
+		r = x;
+		g = y;
+		b = z;
+	}
+};
+
+const color player(1.0, 0.0, 0.0);
+const color enemy(0.0, 0.0, 1.0);
+const color neutral(0.7, 0.7, 0.7);
 
 //The shape superclass
 class Shape{
@@ -114,6 +132,7 @@ void Rectangle::specificDraw() const{
 class Hexagon : public Shape {
 public:
 	Hexagon(float x, float y, float s, float r, float g, float b);
+	void changeColor(float r, float g, float b);
 protected:
 	float r;
 	float g;
@@ -122,6 +141,12 @@ protected:
 };
 
 Hexagon::Hexagon(float x, float y, float s, float r, float g, float b): Shape(x, y, s) {
+	this->r = r;
+	this->g = g;
+	this->b = b;
+}
+
+void Hexagon::changeColor(float r, float g, float b){
 	this->r = r;
 	this->g = g;
 	this->b = b;
@@ -175,7 +200,7 @@ void drawStuff(){
 
 	//Viewpoint:
 	//Left, right, bottom, top, near, far    
-	glOrtho(-0.0, 4.0, -0.0, 4.0, -2.0, 500.0); 
+	glOrtho(0, RESOLUTIONX, RESOLUTIONY, 0, -2.0, 500.0);
 	glMatrixMode(GL_MODELVIEW);
 		
 	for(vector<Shape *>::iterator it = Shape::drawList.begin();
@@ -208,25 +233,38 @@ static void idle(){
 
 void setupDrawList(){
 
-	bool c = false;
-	float scale = 0.2;
-	float xOffset = 13 * scale / 2;
-	float hSpace = 0.0;
+	
+	float scale = 40;
+	float xOffset = 0.0;
+	float xPadding = 1;
+	float yPadding = -9;
+	float yBase = RESOLUTIONY/2 - (30*13 + 10)/2;
 
 	for(int j = 0; j < 13; j++){
-		hSpace = 0.0;
 		for(int i = 0; i < 13; i++){
-			if(c){
-				c = !c;
-				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + hSpace, j * scale, scale, 0.0,1.0,0.0));
-			}else{
-				c = !c;
-				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + hSpace, j * scale, scale, 0.0,0.0,1.0));
+			if ((i == 0 && j == 12) || (i == 0 && j == 0) || (i == 12 && j == 12) || (i == 12 && j == 0)) {
+				// Black out corners
+			} else if(i == 0 || i == 12) {
+				//draw row of red for player
+				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + i * xPadding,
+													  yBase + j * scale + j * yPadding,
+													  scale,
+													  player.r, player.g, player.b));
+			} else if (j == 0 || j == 12){
+				//draw row of blue for AI
+				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + i * xPadding,
+													  yBase + j * scale + j * yPadding,
+													  scale,
+													  enemy.r, enemy.g, enemy.b));
+			} else {
+				// draw our vanilla shapes
+				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + i * xPadding,
+													  yBase + j * scale + j * yPadding,
+													  scale,
+													  neutral.r, neutral.g, neutral.b));
 			}
-			hSpace += 0.02;
 		}
-		xOffset -= (scale / 2);
-		c = !c;
+		xOffset += (scale / 2);
 	}
 
 	//Shape::drawList.push_back(new Triangle(0,0,1));
@@ -267,7 +305,7 @@ void key(unsigned char key, int a, int b){
 void initializeGLUT(int argc, char **argv) {
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(1000,1000); //Set the size you want
+	glutInitWindowSize(RESOLUTIONX, RESOLUTIONY); //Set the size you want
 	glutCreateWindow("GL Primer"); //Window name
 		
 	glutKeyboardFunc(key);
