@@ -102,7 +102,6 @@ Rectangle::Rectangle(float x, float y, float s,float c1, float c2,
 }
 
 void Rectangle::specificDraw() const{
-	cout << "Drawing Rectangle: " << this->xLoc << ", " << this->yLoc << endl;
 	glColor3f(this->c1,this->c2,this->c3);
 	glBegin(GL_POLYGON);
 	glVertex2f(0,0);
@@ -112,7 +111,35 @@ void Rectangle::specificDraw() const{
 	glEnd();
 }
 
-Shape* Shape::cursor = new Rectangle(0,0,1,1,0,0);
+class Hexagon : public Shape {
+public:
+	Hexagon(float x, float y, float s, float r, float g, float b);
+protected:
+	float r;
+	float g;
+	float b;
+	void specificDraw() const;
+};
+
+Hexagon::Hexagon(float x, float y, float s, float r, float g, float b): Shape(x, y, s) {
+	this->r = r;
+	this->g = g;
+	this->b = b;
+}
+
+void Hexagon::specificDraw() const {
+	glColor3f(r, g, b);
+	glBegin(GL_POLYGON);
+	glVertex2f(0.5, 0);
+	glVertex2f(1, 0.25);
+	glVertex2f(1, 0.75);
+	glVertex2f(0.5, 1);
+	glVertex2f(0, 0.75);
+	glVertex2f(0, 0.25);
+	glEnd();
+}
+
+Shape* Shape::cursor = new Hexagon(0,0,1,1,0,0);
 //----------------
 //Text class:
 class Text : public Shape{
@@ -182,17 +209,23 @@ static void idle(){
 void setupDrawList(){
 
 	bool c = false;
+	float scale = 0.2;
+	float xOffset = 13 * scale / 2;
+	float hSpace = 0.0;
 
-	for(int j = 0; j < 10; j++){
-		for(int i = 0; i < 10; i++){
+	for(int j = 0; j < 13; j++){
+		hSpace = 0.0;
+		for(int i = 0; i < 13; i++){
 			if(c){
 				c = !c;
-				Shape::drawList.push_back(new Rectangle(i, j, 1, 0.0,1.0,0.0));
+				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + hSpace, j * scale, scale, 0.0,1.0,0.0));
 			}else{
 				c = !c;
-				Shape::drawList.push_back(new Rectangle(i, j, 1, 0.0,0.0,1.0));
+				Shape::drawList.push_back(new Hexagon(i * scale + xOffset + hSpace, j * scale, scale, 0.0,0.0,1.0));
 			}
+			hSpace += 0.02;
 		}
+		xOffset -= (scale / 2);
 		c = !c;
 	}
 
