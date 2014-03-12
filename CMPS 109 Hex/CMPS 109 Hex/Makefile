@@ -23,7 +23,11 @@ ifeq ($(OS),Darwin)
 	CFLAGS += -framework glut -framework OpenGL
 endif
 
-# Default target builds main program from classes and main program file
+# Target compiles and runs app
+test: all
+	./${NAME}
+
+# Target builds main program from classes and main program file
 all: ${CLASSES}
 	${CPP}	-o ${NAME}	${CFLAGS} ${CLASSES}
 
@@ -33,6 +37,10 @@ ${CLASSES}: %.o: %.cpp
 
 clean:
 	rm -f *.o ${NAME}
+
+# Target zips up all files for submission
+zip: clean
+	zip hex-ai-gui Graph.* Hex.* Makefile README main.cpp Screenshot.png 
 
 # Target to sync local working copy to unix.ic
 sync: clean

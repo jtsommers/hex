@@ -5,6 +5,10 @@ CMPS 109
 12 March 2014
 Assignment 6: Hex++ w/ GUI
 
+Usage: make will compile and run the program
+Input: In addition to making moves as directed via command line, the player can
+       enter "random" to fill the remaining spaces on the board randomly
+
 This program implements a Monte Carlo AI player for the Hex game.
 
 By running a large number of randomized game simulations before each possible
@@ -13,8 +17,10 @@ highest probability of winning. The computer takes about 5-7 seconds to decide
 on which move to make on our machines, but your mileage may vary.
 
 We developed and tested on OSX, but the program is also confirmed to work on 
-Unix with SSH. The user should interact with the program from the command line, 
+Unix with SSH. The user should interact with the program from the command line,
 and the GUI window will update accordingly after each move has been made.
+A screenshot of a complete game has been included with this submission in case
+you are unable to get the GUI to display.
 
 (A note on Unix: ssh -Y was required in our use case, rather than the suggested 
 ssh -X command from Piazza)

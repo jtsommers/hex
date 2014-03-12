@@ -1,7 +1,6 @@
 #include "Hex.h"
 #include <algorithm>
 #include <string>
-#include <time.h>		// clock_t, clock, CLOCKS_PER_SEC
 
 // Constructor: Builds board of a given size. Size should be odd.
 Hex::Hex(int size) : board(size*size), dim(size){
@@ -88,7 +87,7 @@ int Hex::node(int row, int col){
 
 // playerTurn: Gets input from player and processes their move as white.
 bool Hex::playerTurn(){
-	cout << "\nPlayer's turn. (-, East/West)" << endl;
+	cout << "\nPlayer's turn. (-, Red, East/West)" << endl;
 	string playerChoice;
 	bool inputIsBad;
 	int choiceCol, choiceRow;
@@ -131,7 +130,7 @@ bool Hex::playerTurn(){
 
 // computerTurn: AI determines optimal location for black player.
 void Hex::computerTurn(int numSimulations){
-	cout << "\nComputer's turn. (O, North/South)\n";
+	cout << "\nComputer's turn. (O, Blue, North/South)\n";
 	auto timeBegin = chrono::high_resolution_clock::now();
 	
 	vector<vector<Allegiance>> simState = tileOwner;

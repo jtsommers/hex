@@ -1,5 +1,5 @@
-#ifndef __cmps109_asmt03__Graph__
-#define __cmps109_asmt03__Graph__
+#ifndef __cmps109_asmt06__Graph__
+#define __cmps109_asmt06__Graph__
 
 #include <iostream>	// cout
 #include <vector>	// vector

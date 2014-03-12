@@ -23,6 +23,10 @@
 #include <GLUT/glut.h>
 #endif
 
+#ifndef __APPLE__
+#define __APPLE__ 0
+#endif
+
 using namespace std;
 
 #pragma mark shapes
@@ -160,11 +164,11 @@ void takeTurn(Hex& board, int turnMarker) {
 bool checkPath(Hex& board) {
     if (board.pathExists(White)) {
         cout << board;
-        cout << "\nWhite (-, East/West) wins! Hooray for humans!\n";
+        cout << "\nRed (-, East/West) wins! Hooray for humans!\n";
         return true;
     } else if (board.pathExists(Black)) {
         cout << board;
-        cout << "\nBlack (O, North/South) wins! Hooray for computers!\n";
+        cout << "\nBlue (O, North/South) wins! Hooray for computers!\n";
         return true;
     }
     return false;
@@ -219,6 +223,11 @@ static void idle(){
         if (checkPath(h)) {
             win = true;
         }
+    } else {
+        std::cout << "Game finished press Q to quit\n";
+        string temp;
+        std::cin >> temp;
+        throw "Quit";
     }
     updateGuiColors();
 	glutPostRedisplay();
@@ -281,7 +290,12 @@ void initializeGLUT(int argc, char **argv) {
     drawStuff();
 	glutDisplayFunc(drawStuff); //Callback for the current window
 	glutIdleFunc(idle);
-	glutMainLoop();
+    try {
+        glutMainLoop();
+    } catch (const char * exit) {
+        // Break out of Glut
+        std::cout << "\nThanks for playing" << endl;
+    }
 }
 
 int main(int argc, char **argv){
@@ -291,18 +305,28 @@ int main(int argc, char **argv){
     setupDrawList();
     
     //If there is a display, do something.
-	if(getenv("DISPLAY")){
+	if (getenv("DISPLAY")) {
 		std::string display (getenv("DISPLAY"));
 		std::cout << display << std::endl;
         
 		initializeGLUT(argc, argv);
 		
-	}else{ //otherwise complain
-		std::cout <<"arg no display" << std::endl;
+	} else {
 		// DISPLAY doesn't exist locally?
-		if (local) {
+        // This is only for local development on OS X
+		if (__APPLE__) {
 			initializeGLUT(argc, argv);
-		}
+		} else {
+            std::cout << "Display not found, try running through ssh -Y, or just use terminal-based hex below" << std::endl;
+            // Fallback to just terminal hex
+            while (true) {
+                takeTurn(h, turnCounter);
+                turnCounter++;
+                if (checkPath(h)) {
+                    break;
+                }
+            }
+        }
 	}
     return 0;
 }

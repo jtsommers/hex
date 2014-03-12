@@ -1,5 +1,5 @@
-#ifndef __cmps109_asmt04__Hex__
-#define __cmps109_asmt04__Hex__
+#ifndef __cmps109_asmt06__Hex__
+#define __cmps109_asmt06__Hex__
 
 #include "Graph.h"		// Graph
 #include <iostream>		// cout
@@ -55,4 +55,4 @@ private:
 	int node(int row, int col);
 };
 
-#endif /* defined(__cmps109_asmt04__Hex__) */
+#endif /* defined(__cmps109_asmt06__Hex__) */
