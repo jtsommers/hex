@@ -16,10 +16,7 @@ We developed and tested on OSX, but the program is also confirmed to work on
 Unix with SSH. The user should interact with the program from the command line, 
 and the GUI window will update accordingly after each move has been made.
 
-(A note: on Unix the display window won't display until after the first move has
-been made.)
-
-(Another note: ssh -Y was required in our use case, rather than the suggested 
+(A note on Unix: ssh -Y was required in our use case, rather than the suggested 
 ssh -X command from Piazza)
 
 Through completing this program, we learned the true value of friendship, and

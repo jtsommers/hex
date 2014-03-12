@@ -9,7 +9,7 @@
 # Pull in Operating System
 OS = $(shell uname)
 CPP		= g++
-CFLAGS	= -g -std=c++11 -Wall -Wextra
+CFLAGS	= -g -std=c++11
 
 DIR		= CMPS\ 109\ Hex
 NAME	= cmps109_asmt06
