@@ -86,7 +86,6 @@ protected:
     
 public:
 	static vector<Shape *> drawList;
-	static Shape* cursor;
 	Shape(float x, float y, float s);
 	void draw() const;
 	void addMove(float x, float y){xLoc += x; yLoc += y;};
@@ -117,57 +116,6 @@ void Shape::draw() const{
 //Shape Specific Draw:
 void Shape::specificDraw() const{
 	cout << "Virtual specific draw\n";
-}
-
-//---------------
-//Triangle Class:
-class Triangle : public Shape{
-public:
-	Triangle(float x, float y, float s);
-protected:
-	void specificDraw() const;
-    
-};
-
-Triangle::Triangle(float x, float y, float s):Shape(x,y,s){
-	//cout << "Creating Triangle";
-}
-
-void Triangle::specificDraw() const{
-    glBegin(GL_POLYGON);
-    glVertex2f(0,0);
-    glVertex2f(0,1);
-    glVertex2f(1,0);
-    glEnd();
-}
-
-//--------------
-class Rectangle : public Shape{
-public:
-	Rectangle(float x, float y, float s, float c1, float c2, float c3);
-protected:
-	float c1;
-	float c2;
-	float c3;
-	void specificDraw() const;
-};
-
-Rectangle::Rectangle(float x, float y, float s,float c1, float c2,
-                     float c3):Shape(x,y,s){
-	this->c1 = c1;
-	this->c2 = c2;
-	this->c3 = c3;
-	//cout << "Creating Rectangle";
-}
-
-void Rectangle::specificDraw() const{
-	glColor3f(this->c1,this->c2,this->c3);
-	glBegin(GL_POLYGON);
-	glVertex2f(0,0);
-	glVertex2f(0,1);
-	glVertex2f(1,1);
-	glVertex2f(1,0);
-	glEnd();
 }
 
 class Hexagon : public Shape {
@@ -205,8 +153,6 @@ void Hexagon::specificDraw() const {
 	glEnd();
 }
 
-Shape* Shape::cursor = new Hexagon(0,0,1,1,0,0);
-
 
 //Main draw callback:
 void drawStuff(){
@@ -230,7 +176,6 @@ void drawStuff(){
     
 	glPushMatrix();
 	glTranslatef(0,0,1);
-	(Shape::cursor)->draw();
 	glPopMatrix();
 	// glScalef(0.5,0.5,0.5);
 	// glutSolidTeapot(15);
@@ -289,39 +234,6 @@ void setupDrawList(){
 		xOffset += (scale / 2);
 	}
     
-	//Shape::drawList.push_back(new Triangle(0,0,1));
-	//Shape::drawList.push_back(new Triangle(1,1,1));
-	//Shape::drawList.push_back(new Text(2,2,0.005,"hello"));
-	//Shape::drawList.push_back(new Rectangle(3,3,1));
-    
-}
-
-void key(unsigned char key, int a, int b){
-	cout << key << "\n";
-    
-	switch(key){
-        case 'a':
-            Shape::cursor->addMove(-1,0);
-            break;
-        case 'd':
-            Shape::cursor->addMove(1,0);
-            break;
-        case 's':
-            Shape::cursor->addMove(0,-1);
-            break;
-        case 'w':
-            Shape::cursor->addMove(0,1);
-            break;
-	}
-    
-    
-	if(key =='r'){
-		for(vector<Shape *>::iterator it = Shape::drawList.begin();
-            it != Shape::drawList.end(); ++it){
-			(*it)->addMove(-10, 0);
-		}
-	}
-    
 }
 
 void initializeGLUT(int argc, char **argv) {
@@ -330,7 +242,7 @@ void initializeGLUT(int argc, char **argv) {
 	glutInitWindowSize(RESOLUTIONX, RESOLUTIONY); //Set the size you want
 	glutCreateWindow("GL Primer"); //Window name
     
-	glutKeyboardFunc(key);
+	// glutKeyboardFunc(key);
 	glutDisplayFunc(drawStuff); //Callback for the current window
 	glutIdleFunc(idle);
 	glutMainLoop();
