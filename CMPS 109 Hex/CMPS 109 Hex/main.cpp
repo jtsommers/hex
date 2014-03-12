@@ -13,28 +13,41 @@
 
 using namespace std;
 
+void takeTurn(Hex& board, int turnMarker) {
+    if (turnMarker % 2 == 0) {
+        cout << board;
+        // Plays out the rest of the board randomly if human enters "random"
+        if (!board.playerTurn()) {
+            board.playRandom();
+        }
+    } else {
+        // Take AI turn
+        board.computerTurn();
+    }
+}
+
+bool checkPath(Hex& board) {
+    if (board.pathExists(White)) {
+        cout << board;
+        cout << "\nWhite (-, East/West) wins! Hooray for humans!\n";
+        return true;
+    } else if (board.pathExists(Black)) {
+        cout << board;
+        cout << "\nBlack (O, North/South) wins! Hooray for computers!\n";
+        return true;
+    }
+    return false;
+}
+
 int main(int argc, const char * argv[]){
-	int boardSize = 11;
-	Hex h(boardSize);
+    int boardSize = 11;
+    Hex h(boardSize);
 	
 	for (int i = 0; i < boardSize * boardSize; i++) {
-		if(i%2 == 0){
-			cout << h;
-			if (!h.playerTurn()) {
-                h.playRandom();
-            }
-		} else {
-			h.computerTurn();
-		}
-		if (h.pathExists(White)) {
-			cout << h;
-			cout << "\nWhite (-, East/West) wins! Hooray for humans!\n";
-			break;
-		} else if(h.pathExists(Black)){
-			cout << h;
-			cout << "\nBlack (O, North/South) wins! Hooray for computers!\n";
-			break;
-		}
+		takeTurn(h, i);
+		if (checkPath(h)) {
+            break;
+        }
 	}
 		
     return 0;
