@@ -6,19 +6,34 @@
 #	Assignment 6: Hex++ w/ GUI
 #	See README for comments.
 
-CC		= g++
-CFLAGS	= -g -std=c++11 -Wall -Wextra -Wno-deprecated -Wno-sign-compare -framework glut -framework OpenGL
+# Pull in Operating System
+OS = $(shell uname)
+CPP		= g++
+CFLAGS	= -g -std=c++11 -Wall -Wextra
 
-cmps109_asmt06:	main.o	Graph.o	Hex.o
-	${CC} -o cmps109_asmt06 ${CFLAGS} main.o Graph.o Hex.o
-	
-Graph.o: Graph.h Graph.cpp
-	${CC} -c	${CFLAGS}	Graph.cpp
+DIR		= CMPS\ 109\ Hex
+NAME	= cmps109_asmt06
+CLASSES	= Hex.o Graph.o main.o
 
-Hex.o: Hex.h Hex.cpp
-	${CC} -c	${CFLAGS}	Hex.cpp
-	
-main.o:	Graph.h Hex.h main.cpp
-	${CC} -c	${CFLAGS}	main.cpp
+# Add flags based on OS
+ifeq ($(OS),Linux)
+	CFLAGS += -lGL -lglut
+endif 
+ifeq ($(OS),Darwin)
+	CFLAGS += -framework glut -framework OpenGL
+endif
+
+# Default target builds main program from classes and main program file
+all: ${CLASSES}
+	${CPP}	-o ${NAME}	${CFLAGS} ${CLASSES}
+
+# Target expansion, builds .o files from ${CLASSES}.cpp
+${CLASSES}: %.o: %.cpp
+	${CPP}	-c	${CFLAGS} $< -o $@
+
 clean:
-	rm -f *.o
+	rm -f *.o ${NAME}
+
+# Target to sync local working copy to unix.ic
+sync: clean
+	rsync -r -v --exclude '.*' --exclude '*.sublime*' ../${DIR} ${REMOTE_USER}@unix.ic.ucsc.edu:~/

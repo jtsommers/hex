@@ -29,6 +29,7 @@ using namespace std;
 
 const int RESOLUTIONX = 800;
 const int RESOLUTIONY = 600;
+const bool local = false;
 
 struct color {
 	float r;
@@ -211,6 +212,7 @@ void updateGuiColors() {
 }
 
 static void idle(){
+    glutPostRedisplay();
     if (!win) {
         takeTurn(h, turnCounter);
         turnCounter++;
@@ -276,7 +278,7 @@ void initializeGLUT(int argc, char **argv) {
 	glutInitWindowSize(RESOLUTIONX, RESOLUTIONY); //Set the size you want
 	glutCreateWindow("Hex"); //Window name
     
-	// glutKeyboardFunc(key);
+    drawStuff();
 	glutDisplayFunc(drawStuff); //Callback for the current window
 	glutIdleFunc(idle);
 	glutMainLoop();
@@ -298,7 +300,7 @@ int main(int argc, char **argv){
 	}else{ //otherwise complain
 		std::cout <<"arg no display" << std::endl;
 		// DISPLAY doesn't exist locally?
-		if (__APPLE__) {
+		if (local) {
 			initializeGLUT(argc, argv);
 		}
 	}
