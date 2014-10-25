@@ -4,8 +4,9 @@ Play a Hex Game with an AI using command line with GUI display
 
 Contributors
 -------
--Matthew Balousek (mbalouse@ucsc.edu)
--Jordan Sommers (jtsommer@ucsc.edu)
+ - Matthew Balousek (mbalouse@ucsc.edu)
+ - Jordan Sommers (jtsommer@ucsc.edu)
+
 
 About
 -------
