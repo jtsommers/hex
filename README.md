@@ -11,6 +11,7 @@ Contributors
 About
 -------
 **Usage:** make will compile and run the program
+
 **Input:** In addition to making moves as directed via command line, the player can enter "random" to fill the remaining spaces on the board randomly
 
 This program implements a Monte Carlo AI player for the Hex game.
