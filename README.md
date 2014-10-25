@@ -2,10 +2,13 @@ CMPS 109 Hex with GUI
 ===
 Play a Hex Game with an AI using command line with GUI display
 
-**Authors**
+Contributors
+-------
 Matthew Balousek (mbalouse@ucsc.edu)
 Jordan Sommers (jtsommer@ucsc.edu)
 
+About
+-------
 **Usage:** make will compile and run the program
 **Input:** In addition to making moves as directed via command line, the player can enter "random" to fill the remaining spaces on the board randomly
 
